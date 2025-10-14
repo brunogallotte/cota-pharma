@@ -47,7 +47,9 @@ export const Navbar = () => {
               <Link href="/login">Entrar</Link>
             </Button>
             <Button variant="default" asChild>
-              <Link href="/signup">Criar Conta</Link>
+              <Link href="/cadastro" scroll={true}>
+                Criar Conta
+              </Link>
             </Button>
           </div>
 

@@ -10,7 +10,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm, useWatch } from "react-hook-form";
+import { Controller, useForm, UseFormReturn, useWatch } from "react-hook-form";
 import { RegisterFormSchema } from "./RegisterFormSchema";
 import z from "zod";
 import { Building2, Store } from "lucide-react";
@@ -55,58 +55,7 @@ export const RegisterForm = () => {
         </CardHeader>
 
         <CardContent>
-          <div className="space-y-3">
-            <Label className="text-base font-bold">Tipo de Conta</Label>
-            <RadioGroup
-              value={userType}
-              onValueChange={(value) =>
-                formStates.setValue(
-                  "userType",
-                  value as "pharmacy" | "supplier"
-                )
-              }
-              className="grid grid-cols-2 gap-4"
-            >
-              <Label
-                htmlFor="pharmacy"
-                className={`flex flex-col items-center justify-center rounded-lg border-2 p-4 cursor-pointer transition-all ${
-                  userType === "pharmacy"
-                    ? "border-primary bg-primary/5"
-                    : "border-border hover:border-primary/50"
-                }`}
-              >
-                <RadioGroupItem
-                  value="pharmacy"
-                  id="pharmacy"
-                  className="sr-only"
-                />
-                <Store className="h-8 w-8 mb-2 text-primary" />
-                <span className="font-medium">Farmácia</span>
-                <span className="text-xs text-muted-foreground text-center mt-1">
-                  Comprar matérias-primas
-                </span>
-              </Label>
-              <Label
-                htmlFor="fornecedor"
-                className={`flex flex-col items-center justify-center rounded-lg border-2 p-4 cursor-pointer transition-all ${
-                  userType === "supplier"
-                    ? "border-primary bg-primary/5"
-                    : "border-border hover:border-primary/50"
-                }`}
-              >
-                <RadioGroupItem
-                  value="supplier"
-                  id="fornecedor"
-                  className="sr-only"
-                />
-                <Building2 className="h-8 w-8 mb-2 text-primary" />
-                <span className="font-medium">Fornecedor</span>
-                <span className="text-xs text-muted-foreground text-center mt-1">
-                  Vender matérias-primas
-                </span>
-              </Label>
-            </RadioGroup>
-          </div>
+          <AccountTypeInputs formStates={formStates} userType={userType} />
 
           <div className="space-y-4 mt-6">
             <Controller
@@ -167,6 +116,7 @@ export const RegisterForm = () => {
               render={({ field, fieldState }) => (
                 <TextInput
                   label="Senha"
+                  type="password"
                   {...field}
                   error={fieldState.error?.message}
                 />
@@ -180,6 +130,7 @@ export const RegisterForm = () => {
                 <TextInput
                   label="Confirmar Senha"
                   {...field}
+                  type="password"
                   error={fieldState.error?.message}
                 />
               )}
@@ -194,5 +145,61 @@ export const RegisterForm = () => {
         </CardContent>
       </Card>
     </form>
+  );
+};
+
+const AccountTypeInputs = ({
+  formStates,
+  userType,
+}: {
+  formStates: UseFormReturn<z.infer<typeof RegisterFormSchema>>;
+  userType: "pharmacy" | "supplier";
+}) => {
+  return (
+    <div className="space-y-3">
+      <Label className="text-base font-bold">Tipo de Conta</Label>
+      <RadioGroup
+        value={userType}
+        onValueChange={(value) =>
+          formStates.setValue("userType", value as "pharmacy" | "supplier")
+        }
+        className="grid grid-cols-2 gap-4"
+      >
+        <Label
+          htmlFor="pharmacy"
+          className={`flex flex-col items-center justify-center rounded-lg border-2 p-4 cursor-pointer transition-all ${
+            userType === "pharmacy"
+              ? "border-primary bg-primary/5"
+              : "border-border hover:border-primary/50"
+          }`}
+        >
+          <RadioGroupItem value="pharmacy" id="pharmacy" className="sr-only" />
+          <Store className="h-8 w-8 mb-2 text-primary" />
+          <span className="font-medium">Farmácia</span>
+          <span className="text-xs text-muted-foreground text-center mt-1">
+            Comprar matérias-primas
+          </span>
+        </Label>
+        <Label
+          htmlFor="fornecedor"
+          className={`flex flex-col items-center justify-center rounded-lg border-2 p-4 cursor-pointer transition-all ${
+            userType === "supplier"
+              ? "border-primary bg-primary/5"
+              : "border-border hover:border-primary/50"
+          }`}
+        >
+          <RadioGroupItem
+            value="supplier"
+            id="fornecedor"
+            className="sr-only"
+          />
+          <Building2 className="h-8 w-8 mb-2 text-primary" />
+          <span className="font-medium">Fornecedor</span>
+          <span className="text-xs text-muted-foreground text-center mt-1">
+            Vender matérias-primas
+          </span>
+        </Label>
+      </RadioGroup>
+    </div>
   );
 };

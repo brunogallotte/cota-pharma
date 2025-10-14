@@ -10,8 +10,11 @@ export const RegisterFormSchema = z.object({
         .length(18, "CNPJ deve ter 14 dígitos"),
     phone: z.string()
         .min(1, "Digite o seu whatsapp")
-        .length(15, "Telefone deve ter 11 dígitos"),
+        .length(19, "Telefone deve ter 11 dígitos"),
     email: z.email("E-mail é obrigatório").min(1, "E-mail é obrigatório"),
-    password: z.string("Senha é obrigatória").min(1, "Senha é obrigatória"),
-    confirmPassword: z.string("Confirmar Senha é obrigatório").min(1, "Confirmar Senha é obrigatório"),
-})
+    password: z.string("Senha é obrigatória").min(8, "A senha deve ter no mínimo 8 caracteres"),
+    confirmPassword: z.string("Confirmar Senha é obrigatório").min(8, "A senha deve ter no mínimo 8 caracteres"),
+}).refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "As senhas não coincidem",
+});

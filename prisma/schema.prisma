@@ -19,6 +19,7 @@ model users {
   is_confirmed      Boolean             @default(false)
   created_at        DateTime            @default(now()) @db.Timestamp(6)
   updated_at        DateTime?           @db.Timestamp(6)
+  password          String?
   pharmacy_invoices pharmacy_invoices[]
   supplier_catalog  supplier_catalog[]
   user_info         user_info[]
