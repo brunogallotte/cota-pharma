@@ -16,6 +16,7 @@ import z from "zod";
 import { Building2, Store } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { TextInput } from "@/components/TextInput";
 
 export const RegisterForm = () => {
   const formStates = useForm<z.infer<typeof RegisterFormSchema>>({
@@ -112,97 +113,72 @@ export const RegisterForm = () => {
             <Controller
               control={formStates.control}
               name="name"
-              render={({ field }) => (
-                <div className="space-y-1">
-                  <Label className="text-sm font-bold">Nome Completo</Label>
-                  <Input
-                    placeholder="João Silva"
-                    type="text"
-                    className="w-full"
-                    {...field}
-                  />
-                </div>
+              render={({ field, fieldState }) => (
+                <TextInput
+                  label="Nome Completo"
+                  {...field}
+                  error={fieldState.error?.message}
+                />
               )}
             />
 
             <Controller
               control={formStates.control}
               name="cnpj"
-              render={({ field }) => (
-                <div className="space-y-1">
-                  <Label className="text-sm font-bold">CNPJ</Label>
-                  <Input
-                    placeholder="00.000.000/0000-00"
-                    className="w-full"
-                    {...field}
-                  />
-                </div>
+              render={({ field, fieldState }) => (
+                <TextInput
+                  label="CNPJ"
+                  {...field}
+                  error={fieldState.error?.message}
+                />
               )}
             />
 
             <Controller
               control={formStates.control}
               name="email"
-              render={({ field }) => (
-                <div className="space-y-1">
-                  <Label className="text-sm font-bold">E-mail</Label>
-                  <Input
-                    placeholder="example@gmail.com"
-                    className="w-full"
-                    type="email"
-                    {...field}
-                  />
-                </div>
+              render={({ field, fieldState }) => (
+                <TextInput
+                  label="E-mail"
+                  {...field}
+                  error={fieldState.error?.message}
+                />
               )}
             />
 
             <Controller
               control={formStates.control}
               name="phone"
-              render={({ field }) => (
-                <div className="space-y-1">
-                  <Label className="text-sm font-bold">
-                    Celular (Whatsapp)
-                  </Label>
-                  <Input
-                    placeholder="(00) 00000-0000"
-                    type="tel"
-                    className="w-full"
-                    {...field}
-                  />
-                </div>
+              render={({ field, fieldState }) => (
+                <TextInput
+                  label="Celular (Whatsapp)"
+                  {...field}
+                  error={fieldState.error?.message}
+                />
               )}
             />
 
             <Controller
               control={formStates.control}
               name="password"
-              render={({ field }) => (
-                <div className="space-y-1">
-                  <Label className="text-sm font-bold">Senha</Label>
-                  <Input
-                    placeholder="Digite sua senha"
-                    type="password"
-                    className="w-full"
-                    {...field}
-                  />
-                </div>
+              render={({ field, fieldState }) => (
+                <TextInput
+                  label="Senha"
+                  {...field}
+                  error={fieldState.error?.message}
+                />
               )}
             />
 
             <Controller
               control={formStates.control}
               name="confirmPassword"
-              render={({ field }) => (
-                <div className="space-y-1">
-                  <Label className="text-sm font-bold">Confirmar Senha</Label>
-                  <Input
-                    placeholder="Confirme sua senha"
-                    type="password"
-                    className="w-full"
-                    {...field}
-                  />
-                </div>
+              render={({ field, fieldState }) => (
+                <TextInput
+                  label="Confirmar Senha"
+                  {...field}
+                  error={fieldState.error?.message}
+                />
               )}
             />
           </div>
