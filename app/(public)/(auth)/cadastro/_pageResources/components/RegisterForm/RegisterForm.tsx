@@ -14,7 +14,6 @@ import { Controller, useForm, useWatch } from "react-hook-form";
 import { RegisterFormSchema } from "./RegisterFormSchema";
 import z from "zod";
 import { Building2, Store } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { TextInput } from "@/components/TextInput";
 
@@ -47,7 +46,7 @@ export const RegisterForm = () => {
   return (
     <form
       onSubmit={formStates.handleSubmit(submit)}
-      className="w-full max-w-2xl"
+      className="w-full py-10 max-w-2xl"
     >
       <Card>
         <CardHeader className="text-center">
@@ -128,6 +127,8 @@ export const RegisterForm = () => {
               render={({ field, fieldState }) => (
                 <TextInput
                   label="CNPJ"
+                  mask="##.###.###/####-##"
+                  placeholder="00.000.000/0000-00"
                   {...field}
                   error={fieldState.error?.message}
                 />
@@ -152,6 +153,8 @@ export const RegisterForm = () => {
               render={({ field, fieldState }) => (
                 <TextInput
                   label="Celular (Whatsapp)"
+                  mask="+55 (##) #####-####"
+                  placeholder="+55 (00) 00000-0000"
                   {...field}
                   error={fieldState.error?.message}
                 />
