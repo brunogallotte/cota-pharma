@@ -13,9 +13,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm, UseFormReturn, useWatch } from "react-hook-form";
 import { RegisterFormSchema } from "./RegisterFormSchema";
 import z from "zod";
-import { Building2, Store } from "lucide-react";
+import { ArrowRight, Building2, Loader2, Store } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TextInput } from "@/components/TextInput";
+import { UserDAL } from "@/server/data-access-layer/UserDAL";
+import { toast } from "sonner";
 
 export const RegisterForm = () => {
   const formStates = useForm<z.infer<typeof RegisterFormSchema>>({
@@ -37,11 +39,14 @@ export const RegisterForm = () => {
     name: "userType",
   });
 
-  const submit = (data: z.infer<typeof RegisterFormSchema>) => {
-    console.log(data);
-  };
+  const submit = async (data: z.infer<typeof RegisterFormSchema>) => {
+    const response = await UserDAL.registerUser(data);
 
-  console.log("get values", formStates.getValues());
+    if (response.status === "error")
+      return toast.error(response.client?.toast?.title, {
+        description: response.client?.toast?.description,
+      });
+  };
 
   return (
     <form
@@ -138,8 +143,17 @@ export const RegisterForm = () => {
           </div>
 
           <div className="mt-6 w-full">
-            <Button type="submit" className="w-full">
+            <Button
+              disabled={formStates.formState.isSubmitting}
+              type="submit"
+              className="w-full cursor-pointer"
+            >
               Criar conta
+              {formStates.formState.isSubmitting ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <ArrowRight className="size-4" />
+              )}
             </Button>
           </div>
         </CardContent>

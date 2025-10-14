@@ -31,9 +31,6 @@ export const registerUserAction = async (data: z.infer<typeof RegisterFormSchema
     })
 
     return { status: "success" }
-
-    // Aqui você pode continuar com a lógica de criação do usuário
-    // const newUser = await prisma.users.create({...})
 }
 
 type TActionReturn = { status: "success" | "error", data?: any, client?: { redirectUrl?: string, toast?: { title: string, description: string } } }
