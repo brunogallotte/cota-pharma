@@ -18,6 +18,8 @@ import { Button } from "@/components/ui/button";
 import { TextInput } from "@/components/TextInput";
 import { UserDAL } from "@/server/data-access-layer/UserDAL";
 import { toast } from "sonner";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export const RegisterForm = () => {
   const formStates = useForm<z.infer<typeof RegisterFormSchema>>({
@@ -34,6 +36,8 @@ export const RegisterForm = () => {
     },
   });
 
+  const router = useRouter();
+
   const userType = useWatch({
     control: formStates.control,
     name: "userType",
@@ -46,17 +50,29 @@ export const RegisterForm = () => {
       return toast.error(response.client?.toast?.title, {
         description: response.client?.toast?.description,
       });
+
+    router.push("/login");
   };
 
   return (
     <form
       onSubmit={formStates.handleSubmit(submit)}
-      className="w-full py-10 max-w-2xl"
+      className="w-full max-w-2xl overflow-y-auto"
     >
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Criar Conta</CardTitle>
-          <CardDescription>Cadastre-se na CotaPharma</CardDescription>
+          <CardTitle className="text-2xl font-bold">
+            Cadastre-se na CotaPharma
+          </CardTitle>
+          <CardDescription>
+            Já tem uma conta?{" "}
+            <Link
+              href="/login"
+              className="font-bold underline underline-offset-2"
+            >
+              Entrar agora
+            </Link>
+          </CardDescription>
         </CardHeader>
 
         <CardContent>
@@ -69,6 +85,7 @@ export const RegisterForm = () => {
               render={({ field, fieldState }) => (
                 <TextInput
                   label="Nome Completo"
+                  placeholder="John Doe"
                   {...field}
                   error={fieldState.error?.message}
                 />
@@ -95,6 +112,7 @@ export const RegisterForm = () => {
               render={({ field, fieldState }) => (
                 <TextInput
                   label="E-mail"
+                  placeholder="johndoe@example.com"
                   {...field}
                   error={fieldState.error?.message}
                 />
@@ -122,6 +140,7 @@ export const RegisterForm = () => {
                 <TextInput
                   label="Senha"
                   type="password"
+                  placeholder="********"
                   {...field}
                   error={fieldState.error?.message}
                 />
@@ -134,8 +153,9 @@ export const RegisterForm = () => {
               render={({ field, fieldState }) => (
                 <TextInput
                   label="Confirmar Senha"
-                  {...field}
                   type="password"
+                  placeholder="********"
+                  {...field}
                   error={fieldState.error?.message}
                 />
               )}

@@ -11,7 +11,7 @@ export default function ContentWrapper({
       {...props}
       ref={componentRef}
       className={twMerge(
-        "mx-auto w-full  max-w-[1269px] px-4 lg:px-6",
+        "mx-auto w-full max-w-[1269px] px-4 lg:px-6",
         props.className
       )}
     >

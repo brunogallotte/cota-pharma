@@ -1,24 +1,24 @@
 "use server"
 
 import z from "zod"
-import { RegisterFormSchema } from "@/app/(public)/(auth)/cadastro/_pageResources/components/RegisterForm/RegisterFormSchema"
+import { RegisterFormSchema } from "@/app/(public)/(auth)/register/_pageResources/components/RegisterForm/RegisterFormSchema"
 import { prisma } from "@/prisma/prisma"
 import bcrypt from "bcryptjs"
 
 export const registerUserAction = async (data: z.infer<typeof RegisterFormSchema>): Promise<TActionReturn> => {
-    const { email, name, cnpj, phone, password, confirmPassword, userType } = RegisterFormSchema.parse(data)
+    const { email, name, cnpj, phone, password, userType } = RegisterFormSchema.parse(data)
 
-    const hasUserWithSameEmail = await prisma.users.findUnique({ where: { email } })
+    const hasUserWithSameEmail = await prisma.user.findUnique({ where: { email } })
 
     if (hasUserWithSameEmail) return { status: "error", client: { toast: { title: "Erro", description: "Email já cadastrado" } } }
 
-    const hasUserWithSameCnpj = await prisma.users.findUnique({ where: { cnpj } })
+    const hasUserWithSameCnpj = await prisma.user.findUnique({ where: { cnpj } })
 
     if (hasUserWithSameCnpj) return { status: "error", client: { toast: { title: "Erro", description: "CNPJ já cadastrado" } } }
 
     const passwordHashed = await bcrypt.hash(password, 6)
 
-    await prisma.users.create({
+    await prisma.user.create({
         data: {
             email,
             name,

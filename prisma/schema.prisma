@@ -9,47 +9,52 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model users {
-  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email             String              @unique @db.VarChar(255)
-  name              String?             @db.VarChar(100)
-  cnpj              String?             @unique @db.VarChar(100)
-  phone             String?             @db.VarChar(100)
-  type              user_type           @default(pharmacy)
-  is_confirmed      Boolean             @default(false)
-  created_at        DateTime            @default(now()) @db.Timestamp(6)
-  updated_at        DateTime?           @db.Timestamp(6)
-  password          String?
-  pharmacy_invoices pharmacy_invoices[]
-  supplier_catalog  supplier_catalog[]
-  user_info         user_info[]
+model User {
+  id               String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email            String             @unique @db.VarChar(255)
+  name             String             @db.VarChar(100)
+  cnpj             String             @unique @db.VarChar(100)
+  phone            String             @db.VarChar(100)
+  type             USER_TYPE          @default(pharmacy)
+  is_confirmed     Boolean            @default(false)
+  created_at       DateTime           @default(now()) @db.Timestamp(6)
+  updated_at       DateTime?          @db.Timestamp(6)
+  password         String
+  pharmacyInvoices PharmacyInvoices[]
+  supplierCatalog  SupplierCatalog[]
+  userInfo         UserInfo[]
+
+  @@map("users")
 }
 
-model assets {
-  id                       String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name                     String                     @unique @db.VarChar(255)
-  dcb                      String?                    @db.VarChar(100)
-  status                   asset_status               @default(pending_review)
-  description              String?
-  created_at               DateTime?                  @default(now()) @db.Timestamptz(6)
-  updated_at               DateTime?                  @db.Timestamptz(6)
-  pharmacy_invoices_assets pharmacy_invoices_assets[]
-  supplier_catalog         supplier_catalog[]
+model Assets {
+  id                     String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                   String                  @unique @db.VarChar(255)
+  dcb                    String?                 @db.VarChar(100)
+  status                 ASSET_STATUS            @default(pending_review)
+  description            String?
+  created_at             DateTime?               @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime?               @db.Timestamptz(6)
+  pharmacyInvoicesAssets PharmacyInvoiceAssets[]
+  supplierCatalog        SupplierCatalog[]
+
+  @@map("assets")
 }
 
-model supplier_catalog {
+model SupplierCatalog {
   id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   user_id    String    @db.Uuid
   asset_id   String    @db.Uuid
   created_at DateTime? @default(now()) @db.Timestamptz(6)
-  assets     assets    @relation(fields: [asset_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  users      users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  assets     Assets    @relation(fields: [asset_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user       User      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([user_id, asset_id], map: "unique_supplier_asset")
   @@index([user_id], map: "idx_supplier_catalog_user_id")
+  @@map("supplier_catalog")
 }
 
-model user_info {
+model UserInfo {
   id                       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   user_id                  String  @db.Uuid
   zip_code                 String? @db.VarChar(255)
@@ -59,46 +64,48 @@ model user_info {
   state                    String? @db.VarChar(255)
   verification_email_token String? @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   password_recovery_token  String? @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  users                    users   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user                     User    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("users_info")
 }
 
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model pharmacy_invoices {
-  id                       String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id                  String                     @db.Uuid
-  status                   pharmacy_invoice_status    @default(pending)
-  value                    Decimal                    @db.Decimal
-  created_at               DateTime?                  @default(now()) @db.Timestamptz(6)
-  users                    users                      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  pharmacy_invoices_assets pharmacy_invoices_assets[]
+model PharmacyInvoices {
+  id                     String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id                String                  @db.Uuid
+  status                 PHARMACY_INVOICE_STATUS @default(pending)
+  value                  Decimal                 @db.Decimal
+  created_at             DateTime?               @default(now()) @db.Timestamptz(6)
+  user                   User                    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  pharmacyInvoicesAssets PharmacyInvoiceAssets[]
 
   @@index([user_id], map: "idx_pharmacy_invoices_user_id")
+  @@map("pharmacy_invoices")
 }
 
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-model pharmacy_invoices_assets {
-  id                String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  invoice_id        String            @db.Uuid
-  asset_id          String            @db.Uuid
-  quantity          Decimal           @db.Decimal
-  assets            assets            @relation(fields: [asset_id], references: [id], onUpdate: NoAction)
-  pharmacy_invoices pharmacy_invoices @relation(fields: [invoice_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+model PharmacyInvoiceAssets {
+  id               String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  invoice_id       String           @db.Uuid
+  asset_id         String           @db.Uuid
+  quantity         Decimal          @db.Decimal
+  assets           Assets           @relation(fields: [asset_id], references: [id], onUpdate: NoAction)
+  pharmacyInvoices PharmacyInvoices @relation(fields: [invoice_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([asset_id], map: "idx_pharmacy_invoices_assets_asset_id")
   @@index([invoice_id], map: "idx_pharmacy_invoices_assets_invoice_id")
+  @@map("pharmacy_invoices_assets")
 }
 
-enum user_type {
+enum USER_TYPE {
   pharmacy
   supplier
 }
 
-enum asset_status {
+enum ASSET_STATUS {
   approved
   pending_review
 }
 
-enum pharmacy_invoice_status {
+enum PHARMACY_INVOICE_STATUS {
   pending
   paid
 }
