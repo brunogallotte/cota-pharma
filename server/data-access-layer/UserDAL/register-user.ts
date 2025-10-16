@@ -6,6 +6,7 @@ import { prisma } from "@/prisma/prisma"
 import bcrypt from "bcryptjs"
 import { randomUUID } from "node:crypto"
 import { EmailDAL } from "../EmailDAL"
+import getHostViaHeaders from "@/utils/getHostViaHeaders"
 
 export const registerUserAction = async (data: z.infer<typeof RegisterFormSchema>): Promise<TActionReturn> => {
     const { email, name, cnpj, phone, password, userType } = RegisterFormSchema.parse(data)
@@ -38,6 +39,8 @@ export const registerUserAction = async (data: z.infer<typeof RegisterFormSchema
         }
     })
 
+    const host = await getHostViaHeaders();
+
     await EmailDAL.resendConnection.emails.send({
         from: "Bruno Gallotte <onboarding@resend.dev>",
         to: "cotapharma@gmail.com",
@@ -45,7 +48,7 @@ export const registerUserAction = async (data: z.infer<typeof RegisterFormSchema
         react: EmailDAL.reactEmails.ConfirmEmail({
             name: "Bruno Gallotte",
             emailVerificationToken: verificationEmailToken,
-            host: "localhost:3000"
+            host
         })
     });
 
