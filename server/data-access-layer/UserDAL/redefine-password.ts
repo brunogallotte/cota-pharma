@@ -2,7 +2,7 @@
 
 import z from "zod"
 import { prisma } from "@/prisma/prisma"
-import bcrypt from "bcryptjs"
+import bcrypt, { compare } from "bcryptjs"
 import getQueriesViaHeaders from "@/utils/getQueriesViaHeaders"
 import { RedefinePasswordSchema } from "@/app/(public)/(auth)/auth/redefine/_pageResources/components/RedefinePasswordForm/RedefinePasswordSchema"
 
@@ -11,11 +11,15 @@ export const redefinePasswordAction = async (data: z.infer<typeof RedefinePasswo
 
     const queries = await getQueriesViaHeaders()
 
-    const user = await prisma.user.findFirst({ where: { userInfo: { some: { password_recovery_token: queries.token } } }, select: { id: true, userInfo: { select: { password_recovery_token: true, id: true } } } })
+    const user = await prisma.user.findFirst({ where: { userInfo: { some: { password_recovery_token: queries.token } } }, select: { id: true, password: true, userInfo: { select: { password_recovery_token: true, id: true } } } })
+
+    const isPasswordTheSame = await compare(password, user?.password || "")
+
+    if (isPasswordTheSame) return { status: "error", client: { toast: { title: "Erro", description: "A nova senha não pode ser igual a senha antiga" } } }
 
     if (!user || queries.token !== user.userInfo[0].password_recovery_token) return { status: "error", client: { toast: { title: "Erro", description: "Token de recuperação de senha inválido" } } }
 
-    await prisma.user.update({ where: { id: user.id }, data: { password: await bcrypt.hash(password, 6), userInfo: { update: { where: { id: user.userInfo[0].id }, data: { password_recovery_token: null } } } } })
+    await prisma.user.update({ where: { id: user?.id }, data: { password: await bcrypt.hash(password, 6), userInfo: { update: { where: { id: user?.userInfo[0].id }, data: { password_recovery_token: null } } } } })
 
     return { status: "success" }
 }

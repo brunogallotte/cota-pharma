@@ -9,7 +9,7 @@ export default async function Page(props: TNextPageParameters) {
   if (!queries.token) redirect("/login");
 
   return (
-    <ContentWrapper element="section">
+    <ContentWrapper element="section" className="min-h-[calc(100vh-40px)] flex flex-col items-center py-10">
       <RedefinePasswordForm />
     </ContentWrapper>
   );

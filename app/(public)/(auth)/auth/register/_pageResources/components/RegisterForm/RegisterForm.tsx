@@ -51,7 +51,7 @@ export const RegisterForm = () => {
         description: response.client?.toast?.description,
       });
 
-    router.push("/login");
+    router.push("/auth/login");
   };
 
   return (
@@ -67,7 +67,7 @@ export const RegisterForm = () => {
           <CardDescription>
             Já tem uma conta?{" "}
             <Link
-              href="/login"
+              href="/auth/login"
               className="font-bold underline underline-offset-2"
             >
               Entrar agora

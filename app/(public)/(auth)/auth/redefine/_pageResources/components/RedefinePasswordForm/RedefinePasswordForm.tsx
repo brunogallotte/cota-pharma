@@ -33,7 +33,7 @@ export const RedefinePasswordForm = () => {
         description: response.client?.toast?.description,
       });
 
-    router.push("/login");
+    router.push("/auth/login");
   };
 
   return (

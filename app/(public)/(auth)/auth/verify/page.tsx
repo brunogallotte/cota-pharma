@@ -10,7 +10,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { UserDAL } from "@/server/data-access-layer/UserDAL";
 import getQueriesViaHeaders from "@/utils/getQueriesViaHeaders";
-import { ArrowLeft, Verified } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { ReactNode, Suspense } from "react";
 import { Success } from "./_pageResources/components/Success";
@@ -18,7 +18,10 @@ import { cn } from "@/lib/utils";
 
 export default function Page() {
   return (
-    <ContentWrapper element="section">
+    <ContentWrapper
+      element="section"
+      className="min-h-[calc(100vh-40px)] flex flex-col items-center py-10"
+    >
       <VerifyEmailSuspensed />
     </ContentWrapper>
   );
@@ -32,8 +35,9 @@ const VerifyEmailSuspensed = () => {
           status="pending"
           title="Estamos verificando o seu email"
           description="Aguarde alguns segundos por favor..."
-          children={<Spinner className="size-10" />}
-        />
+        >
+          <Spinner className="size-10" />
+        </VerifyEmailTemplate>
       }
     >
       <VerifyEmail />
@@ -51,14 +55,13 @@ const VerifyEmail = async () => {
         status="error"
         title="Token não encontrado"
         description="Entre em contato com o suporte ou tente novamente mais tarde."
-        children={
-          <Link href="/login">
-            <Button className="cursor-pointer">
-              <ArrowLeft className="size-4" /> Voltar
-            </Button>
-          </Link>
-        }
-      />
+      >
+        <Link href="/auth/login">
+          <Button className="cursor-pointer">
+            <ArrowLeft className="size-4" /> Voltar
+          </Button>
+        </Link>
+      </VerifyEmailTemplate>
     );
 
   const response = await UserDAL.verifyEmail({ token });
@@ -69,22 +72,22 @@ const VerifyEmail = async () => {
         status="error"
         title="Erro ao verificar o email"
         description="Entre em contato com o suporte ou tente novamente mais tarde."
-        children={
-          <Link href="/login">
-            <Button className="cursor-pointer">
-              <ArrowLeft className="size-4" /> Voltar
-            </Button>
-          </Link>
-        }
-      />
+      >
+        <Link href="/auth/login">
+          <Button className="cursor-pointer">
+            <ArrowLeft className="size-4" /> Voltar
+          </Button>
+        </Link>
+      </VerifyEmailTemplate>
     );
 
   return (
     <VerifyEmailTemplate
       status="success"
       title="O seu e-mail foi verificado com sucesso"
-      children={<Success />}
-    />
+    >
+      <Success />
+    </VerifyEmailTemplate>
   );
 };
 

@@ -51,7 +51,7 @@ export const LoginForm = () => {
           <CardDescription>
             Nao tem uma conta?{" "}
             <Link
-              href="/register"
+              href="/auth/register"
               className="font-bold underline underline-offset-2"
             >
               Registre-se agora
