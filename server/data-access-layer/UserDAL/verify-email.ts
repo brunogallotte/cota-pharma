@@ -10,7 +10,7 @@ export const verifyEmailAction = async ({ token }: { token: string }) => {
 
     if (!user) return { status: "error", client: { toast: { title: "Erro", description: "Usuário não encontrado" } } }
 
-    // if (user.is_confirmed) return { status: "error", client: { toast: { title: "Erro", description: "Email já verificado" } } }
+    if (user.is_confirmed) return { status: "error", client: { toast: { title: "Erro", description: "Email já verificado" } } }
 
     if (user.userInfo[0].verification_email_token !== token) return { status: "error", client: { toast: { title: "Erro", description: "Token de verificação inválido" } } }
 
