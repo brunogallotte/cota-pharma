@@ -133,33 +133,35 @@ export const RegisterForm = () => {
               )}
             />
 
-            <Controller
-              control={formStates.control}
-              name="password"
-              render={({ field, fieldState }) => (
-                <TextInput
-                  label="Senha"
-                  type="password"
-                  placeholder="********"
-                  {...field}
-                  error={fieldState.error?.message}
-                />
-              )}
-            />
+            <div className="grid lg:grid-cols-2 gap-4">
+              <Controller
+                control={formStates.control}
+                name="password"
+                render={({ field, fieldState }) => (
+                  <TextInput
+                    label="Senha"
+                    type="password"
+                    placeholder="********"
+                    {...field}
+                    error={fieldState.error?.message}
+                  />
+                )}
+              />
 
-            <Controller
-              control={formStates.control}
-              name="confirmPassword"
-              render={({ field, fieldState }) => (
-                <TextInput
-                  label="Confirmar Senha"
-                  type="password"
-                  placeholder="********"
-                  {...field}
-                  error={fieldState.error?.message}
-                />
-              )}
-            />
+              <Controller
+                control={formStates.control}
+                name="confirmPassword"
+                render={({ field, fieldState }) => (
+                  <TextInput
+                    label="Confirmar Senha"
+                    type="password"
+                    placeholder="********"
+                    {...field}
+                    error={fieldState.error?.message}
+                  />
+                )}
+              />
+            </div>
           </div>
 
           <div className="mt-6 w-full">
