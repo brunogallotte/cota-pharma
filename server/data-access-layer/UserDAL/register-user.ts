@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs"
 import { randomUUID } from "node:crypto"
 import { EmailDAL } from "../EmailDAL"
 import getHostViaHeaders from "@/utils/getHostViaHeaders"
+import getQueriesViaHeaders from "@/utils/getQueriesViaHeaders"
 
 export const registerUserAction = async (data: z.infer<typeof RegisterFormSchema>): Promise<TActionReturn> => {
     const { email, name, cnpj, phone, password, userType } = RegisterFormSchema.parse(data)
@@ -40,6 +41,7 @@ export const registerUserAction = async (data: z.infer<typeof RegisterFormSchema
     })
 
     const host = await getHostViaHeaders();
+    const queries = await getQueriesViaHeaders()
 
     await EmailDAL.resendConnection.emails.send({
         from: "Bruno Gallotte <onboarding@resend.dev>",
