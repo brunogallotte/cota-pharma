@@ -4,6 +4,8 @@ import z from "zod"
 import { RegisterFormSchema } from "@/app/(public)/(auth)/register/_pageResources/components/RegisterForm/RegisterFormSchema"
 import { prisma } from "@/prisma/prisma"
 import bcrypt from "bcryptjs"
+import { randomUUID } from "node:crypto"
+import { EmailDAL } from "../EmailDAL"
 
 export const registerUserAction = async (data: z.infer<typeof RegisterFormSchema>): Promise<TActionReturn> => {
     const { email, name, cnpj, phone, password, userType } = RegisterFormSchema.parse(data)
@@ -17,8 +19,9 @@ export const registerUserAction = async (data: z.infer<typeof RegisterFormSchema
     if (hasUserWithSameCnpj) return { status: "error", client: { toast: { title: "Erro", description: "CNPJ já cadastrado" } } }
 
     const passwordHashed = await bcrypt.hash(password, 6)
+    const verificationEmailToken = randomUUID()
 
-    await prisma.user.create({
+    const user =await prisma.user.create({
         data: {
             email,
             name,
@@ -26,9 +29,25 @@ export const registerUserAction = async (data: z.infer<typeof RegisterFormSchema
             phone,
             password: passwordHashed,
             type: userType,
-            created_at: new Date()
+            created_at: new Date(),
+            userInfo: {
+                create: {
+                    verification_email_token: verificationEmailToken
+                }
+            }
         }
     })
+
+    await EmailDAL.resendConnection.emails.send({
+        from: "Bruno Gallotte <onboarding@resend.dev>",
+        to: "cotapharma@gmail.com",
+        subject: "Confirme seu email",
+        react: EmailDAL.reactEmails.ConfirmEmail({
+            name: "Bruno Gallotte",
+            emailVerificationToken: verificationEmailToken,
+            host: "localhost:3000"
+        })
+    });
 
     return { status: "success" }
 }
