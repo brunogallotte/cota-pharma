@@ -14,14 +14,26 @@ import { TextInput } from "@/components/TextInput";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { RedefinePasswordSchema } from "./RedefinePasswordSchema";
+import { UserDAL } from "@/server/data-access-layer/UserDAL";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export const RedefinePasswordForm = () => {
   const formStates = useForm<z.infer<typeof RedefinePasswordSchema>>({
     resolver: zodResolver(RedefinePasswordSchema),
   });
 
+  const router = useRouter();
+
   const submit = async (data: z.infer<typeof RedefinePasswordSchema>) => {
-    console.log(data);
+    const response = await UserDAL.redefinePassword(data);
+
+    if (response.status === "error")
+      return toast.error(response.client?.toast?.title, {
+        description: response.client?.toast?.description,
+      });
+
+    router.push("/login");
   };
 
   return (
