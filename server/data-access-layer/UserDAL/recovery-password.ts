@@ -3,7 +3,7 @@
 import z from "zod"
 import { prisma } from "@/prisma/prisma"
 import bcrypt from "bcryptjs"
-import { RecoveryPasswordSchema } from "@/app/(public)/(auth)/auth/recovery/_pageResources/components/RecoveryPasswordForm/RecoveryPasswordSchema"
+import { RecoveryPasswordSchema } from "@/app/(public)/(auth)/auth/redefine/_pageResources/components/RecoveryPasswordForm/RecoveryPasswordSchema"
 import { auth } from "@/auth"
 import getQueriesViaHeaders from "@/utils/getQueriesViaHeaders"
 

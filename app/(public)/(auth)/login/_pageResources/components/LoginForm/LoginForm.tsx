@@ -59,7 +59,7 @@ export const LoginForm = () => {
           </CardDescription>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="">
           <Controller
             control={formStates.control}
             name="email"
@@ -80,12 +80,21 @@ export const LoginForm = () => {
               <TextInput
                 label="Senha"
                 type="password"
+                classNames={{ container: "mt-3" }}
                 placeholder="********"
                 {...field}
                 error={fieldState.error?.message}
               />
             )}
           />
+          <Link href="/auth/recovery">
+            <Button
+              className="cursor-pointer py-0 h-auto px-0 text-xs"
+              variant="link"
+            >
+              Esqueceu sua senha?
+            </Button>
+          </Link>
 
           <div className="mt-6 w-full">
             <Button
