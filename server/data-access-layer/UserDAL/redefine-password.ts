@@ -3,12 +3,12 @@
 import z from "zod"
 import { prisma } from "@/prisma/prisma"
 import bcrypt from "bcryptjs"
-import { RecoveryPasswordSchema } from "@/app/(public)/(auth)/auth/redefine/_pageResources/components/RecoveryPasswordForm/RecoveryPasswordSchema"
 import { auth } from "@/auth"
 import getQueriesViaHeaders from "@/utils/getQueriesViaHeaders"
+import { RedefinePasswordSchema } from "@/app/(public)/(auth)/auth/redefine/_pageResources/components/RedefinePasswordForm/RedefinePasswordSchema"
 
-export const recoveryPasswordAction = async (data: z.infer<typeof RecoveryPasswordSchema>): Promise<TActionReturn> => {
-    const { password } = RecoveryPasswordSchema.parse(data)
+export const redefinePasswordAction = async (data: z.infer<typeof RedefinePasswordSchema>): Promise<TActionReturn> => {
+    const { password } = RedefinePasswordSchema.parse(data)
 
     const session = await auth()
     const queries = await getQueriesViaHeaders()

@@ -38,7 +38,7 @@ export default function RecoveryPasswordEmailTemplate(p: TProps) {
         Para redefinir sua senha, basta clicar no botão abaixo.
       </Text>
       <ReactEmailButton
-        href={`${host}/auth/recovery?token=${props.emailVerificationToken}${
+        href={`${host}/auth/redefine?token=${props.emailVerificationToken}${
           props.redirectURL ? `&redirect=${props.redirectURL}` : ""
         }`}
       >

@@ -9,18 +9,18 @@ import {
 } from "@/components/ui/card";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
-import { RecoveryPasswordSchema } from "./RecoveryPasswordSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TextInput } from "@/components/TextInput";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader2 } from "lucide-react";
+import { RedefinePasswordSchema } from "./RedefinePasswordSchema";
 
-export const RecoveryPasswordForm = () => {
-  const formStates = useForm<z.infer<typeof RecoveryPasswordSchema>>({
-    resolver: zodResolver(RecoveryPasswordSchema),
+export const RedefinePasswordForm = () => {
+  const formStates = useForm<z.infer<typeof RedefinePasswordSchema>>({
+    resolver: zodResolver(RedefinePasswordSchema),
   });
 
-  const submit = async (data: z.infer<typeof RecoveryPasswordSchema>) => {
+  const submit = async (data: z.infer<typeof RedefinePasswordSchema>) => {
     console.log(data);
   };
 

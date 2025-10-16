@@ -1,7 +1,7 @@
 import { TNextPageParameters } from "@/@types/TNextPageParameters";
 import ContentWrapper from "@/components/ContentWrapper";
 import { redirect } from "next/navigation";
-import { RecoveryPasswordForm } from "./_pageResources/components/RecoveryPasswordForm/RecoveryPasswordForm";
+import { RedefinePasswordForm } from "./_pageResources/components/RedefinePasswordForm/RedefinePasswordForm";
 
 export default async function Page(props: TNextPageParameters) {
   const queries = await props.searchParams;
@@ -10,7 +10,7 @@ export default async function Page(props: TNextPageParameters) {
 
   return (
     <ContentWrapper element="section">
-      <RecoveryPasswordForm />
+      <RedefinePasswordForm />
     </ContentWrapper>
   );
 }

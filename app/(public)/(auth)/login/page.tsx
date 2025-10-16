@@ -4,7 +4,7 @@ import { LoginForm } from "./_pageResources/components/LoginForm/LoginForm";
 export default function LoginPage() {
   return (
     <ContentWrapper
-      className="min-h-[calc(100vh-65px)] flex justify-center py-10"
+      className="h-full flex justify-center items-center"
       element="section"
     >
       <LoginForm />
