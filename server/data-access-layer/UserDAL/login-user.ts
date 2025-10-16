@@ -1,7 +1,7 @@
 "use server"
 
 import z from "zod"
-import { LoginFormSchema } from "@/app/(public)/(auth)/login/_pageResources/components/LoginForm/LoginFormSchema"
+import { LoginFormSchema } from "@/app/(public)/(auth)/auth/login/_pageResources/components/LoginForm/LoginFormSchema"
 import { signIn } from "@/auth"
 
 export const loginUserAction = async (data: z.infer<typeof LoginFormSchema>): Promise<TActionReturn> => {

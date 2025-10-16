@@ -1,7 +1,7 @@
 "use server"
 
 import z from "zod"
-import { RegisterFormSchema } from "@/app/(public)/(auth)/register/_pageResources/components/RegisterForm/RegisterFormSchema"
+import { RegisterFormSchema } from "@/app/(public)/(auth)/auth/register/_pageResources/components/RegisterForm/RegisterFormSchema"
 import { prisma } from "@/prisma/prisma"
 import bcrypt from "bcryptjs"
 import { randomUUID } from "node:crypto"
